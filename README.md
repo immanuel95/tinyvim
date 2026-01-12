@@ -2,6 +2,11 @@
 
 - Minimal Neovim config meant to be a starting point for new neovim users.
 
+## Requirements
+
+- Neovim 0.11.0 or later (nightly)
+- [tree-sitter-cli](https://github.com/tree-sitter/tree-sitter/blob/master/crates/cli/README.md) (0.26.1 or later)
+
 # Install
 
 - Linux or MacOS

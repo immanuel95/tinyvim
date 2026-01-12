@@ -14,9 +14,11 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 })
 
 api.nvim_create_autocmd("FileType", {
-  pattern = { "<filetype>" },
+  pattern = "*",
   callback = function()
-    vim.treesitter.start()
-    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    local ok = pcall(vim.treesitter.start)
+    if ok then
+      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    end
   end,
 })
