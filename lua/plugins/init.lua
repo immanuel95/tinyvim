@@ -1,56 +1,49 @@
+local function cfg(name)
+  return require("plugins.configs." .. name)
+end
+
 return {
-  { lazy = true, "nvim-lua/plenary.nvim" },
-
-  { "nvim-tree/nvim-web-devicons", opts = {} },
-  { "echasnovski/mini.statusline", opts = {} },
-  { "lewis6991/gitsigns.nvim", opts = {} },
-
-  "EdenEast/nightfox.nvim",
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = {},
+  },
 
   {
-    "nvim-tree/nvim-tree.lua",
-    cmd = { "NvimTreeToggle", "NvimTreeFocus" },
-    opts = {},
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    opts = {
+      flavour = "mocha",
+      transparent_background = true,
+      float = {
+        transparent = false,
+        solid = false,
+      },
+    },
   },
 
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
-      require "plugins.configs.treesitter"
+      cfg("treesitter").setup()
     end,
   },
 
   {
     "akinsho/bufferline.nvim",
-    opts = require "plugins.configs.bufferline",
+    event = "VeryLazy",
+    opts = cfg "bufferline",
   },
 
-  -- we use blink plugin only when in insert mode
-  -- so lets lazyload it at InsertEnter event
   {
     "saghen/blink.cmp",
     version = "1.*",
     event = "InsertEnter",
     dependencies = {
-      "rafamadriz/friendly-snippets",
-
-      -- snippets engine
-      {
-        "L3MON4D3/LuaSnip",
-        config = function()
-          require("luasnip.loaders.from_vscode").lazy_load()
-        end,
-      },
-
-      -- autopairs , autocompletes ()[] etc
-      { "windwp/nvim-autopairs", opts = {} },
+      "echasnovski/mini.nvim",
     },
-    -- made opts a function cuz cmp config calls cmp module
-    -- and we lazyloaded cmp so we dont want that file to be read on startup!
-    opts = function()
-      return require "plugins.configs.blink"
-    end,
+    opts = cfg "blink",
   },
 
   {
@@ -63,26 +56,104 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require "plugins.configs.lspconfig"
+      cfg "lspconfig"
     end,
   },
 
   {
     "stevearc/conform.nvim",
-    opts = require "plugins.configs.conform",
+    event = { "BufWritePre", "BufNewFile" },
+    opts = cfg "conform",
+    config = function(_, opts)
+      require("conform").setup(opts)
+    end,
   },
 
   {
-    "nvimdev/indentmini.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    opts = {},
+    "echasnovski/mini.nvim",
+    version = "*",
+    config = function()
+      cfg("mini").setup()
+    end,
   },
 
-  -- files finder etc
   {
-    "nvim-telescope/telescope.nvim",
-    cmd = "Telescope",
-    opts = require "plugins.configs.telescope",
+    "MagicDuck/grug-far.nvim",
+    opts = { headerMaxWidth = 80 },
+    cmd = "GrugFar",
+    keys = {
+      {
+        "<leader>sr",
+        function()
+          local grug = require "grug-far"
+          local ext = vim.bo.buftype == "" and vim.fn.expand "%:e"
+          grug.open {
+            transient = true,
+            prefills = {
+              filesFilter = ext and ext ~= "" and "*." .. ext or nil,
+            },
+          }
+        end,
+        mode = { "n", "v" },
+        desc = "Search and Replace",
+      },
+    },
   },
 
+  {
+    "mfussenegger/nvim-lint",
+    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+    config = function()
+      local lint = require "lint"
+
+      lint.linters_by_ft = {
+        python = { "ruff" },
+        javascript = { "eslint_d" },
+        typescript = { "eslint_d" },
+        javascriptreact = { "eslint_d" },
+        typescriptreact = { "eslint_d" },
+        svelte = { "eslint_d" },
+      }
+
+      local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+      vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+        group = lint_augroup,
+        callback = function()
+          lint.try_lint()
+        end,
+      })
+    end,
+  },
+
+  {
+    "windwp/nvim-ts-autotag",
+    ft = {
+      "svelte",
+      "javascript",
+      "typescript",
+      "javascriptreact",
+      "typescriptreact",
+      "html",
+    },
+    opts = {
+      enable_close = true,
+      enable_rename = true,
+      enable_close_on_slash = true,
+    },
+  },
+
+  {
+    "Vigemus/iron.nvim",
+    ft = { "python" },
+    config = function()
+      cfg "iron"
+    end,
+  },
+
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    ft = { "markdown" },
+    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" },
+    opts = cfg("render-markdown").opts,
+  },
 }

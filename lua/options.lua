@@ -1,36 +1,58 @@
 local o = vim.o
+local opt = vim.opt
 
+-- Leader keys
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-o.laststatus = 3 -- global statusline
+-- UI
+o.laststatus = 3
 o.showmode = false
+o.winborder = "rounded"
+o.termguicolors = true
+o.cursorline = true
+o.number = true
+o.signcolumn = "yes"
+opt.fillchars = { eob = " " }
 
-o.clipboard = "unnamedplus"
+-- Window management
+o.splitbelow = true
+o.splitright = true
 
--- Indenting
+-- Editing
 o.expandtab = true
 o.shiftwidth = 2
 o.smartindent = true
 o.tabstop = 2
 o.softtabstop = 2
+o.undofile = true
 
-vim.opt.fillchars = { eob = " " }
+-- Search
 o.ignorecase = true
 o.smartcase = true
+
+-- Mouse
 o.mouse = "a"
 
-o.number = true
+-- Clipboard
+o.clipboard = "unnamedplus"
 
-o.signcolumn = "yes"
-o.splitbelow = true
-o.splitright = true
-o.termguicolors = true
-o.timeoutlen = 400
-o.undofile = true
-o.cursorline = true
+-- Cursor
+opt.guicursor = {
+  "n-v-c:block-Cursor",
+  "i-ci-ve:ver25-Cursor",
+  "r-cr:hor20-Cursor",
+  "n-v-c-i-ci-ve-r-cr:blinkon500-blinkoff500",
+}
 
--- add binaries installed by mason.nvim to path
+-- Timeouts
+o.timeoutlen = 2000
+o.ttimeoutlen = 10
+
+-- Highlight groups
+vim.api.nvim_set_hl(0, "YankHighlight", { bg = "#df8e1d", fg = "NONE" })
+vim.api.nvim_set_hl(0, "IndentLine", { link = "Comment" })
+
+-- Mason binaries path
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
 vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. vim.fn.stdpath "data" .. "/mason/bin"
-
-vim.api.nvim_set_hl(0, "IndentLine", { link = "Comment" })

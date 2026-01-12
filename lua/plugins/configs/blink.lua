@@ -1,15 +1,13 @@
 return {
-  snippets = { preset = "luasnip" },
-  cmdline = { enabled = true },
+  snippets = { preset = "mini_snippets" },
+  cmdline = { enabled = false },
   appearance = { nerd_font_variant = "normal" },
   fuzzy = { implementation = "prefer_rust" },
-  sources = { default = { "lsp", "snippets", "buffer", "path" } },
+  sources = { default = { "lsp", "path", "snippets", "buffer" } },
 
   keymap = {
     preset = "default",
     ["<CR>"] = { "accept", "fallback" },
-    ["<C-b>"] = { "scroll_documentation_up", "fallback" },
-    ["<C-f"] = { "scroll_documentation_down", "fallback" },
   },
 
   completion = {

@@ -1,10 +1,15 @@
+vim.loader.enable()
+
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.g.have_nerd_font = true
+
 require "options"
+require "autocmd"
+require "usercmd"
 require "mappings"
-require "commands"
 
--- bootstrap plugins & lazy.nvim
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim" -- path where its going to be installed
-
+local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
     "git",
@@ -19,7 +24,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = require "plugins"
+local opts = require "lazy_config"
 
-require("lazy").setup(plugins, require "lazy_config")
+require("lazy").setup(plugins, opts)
 
-vim.cmd "colorscheme nightfox"
+pcall(vim.cmd.colorscheme, "catppuccin")

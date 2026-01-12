@@ -1,9 +1,31 @@
-require("nvim-treesitter.configs").setup {
-  ensure_installed = { "lua", "vim", "vimdoc", "html", "css", "typescript", "javascript" },
+local M = {}
 
-  highlight = {
-    enable = true,
-    use_languagetree = true,
-  },
-  indent = { enable = true },
-}
+M.setup = function()
+  vim.api.nvim_create_user_command("TSInstallAll", function()
+    require("nvim-treesitter").install {
+      "vim",
+      "lua",
+      "vimdoc",
+      "http",
+      "markdown",
+      "markdown_inline",
+      "yaml",
+      "query",
+      "printf",
+      "dockerfile",
+      "html",
+      "css",
+      "typescript",
+      "javascript",
+      "tsx",
+      "svelte",
+      "python",
+      "go",
+      "gomod",
+      "gowork",
+      "gosum",
+    }
+  end, {})
+end
+
+return M
