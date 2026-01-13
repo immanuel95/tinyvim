@@ -10,7 +10,7 @@ map("n", "<C-s>", ":w<CR>", { noremap = true, silent = true, desc = "Save" })
 map("i", "<C-c>", "<Esc>", { noremap = true, silent = true, desc = "Exit Insert mode" })
 map(
   "n",
-  "<leader>sc",
+  "<leader>ss",
   ":setlocal spell spelllang=en_us<CR>",
   { noremap = true, silent = true, desc = "Check English spelling" }
 )
