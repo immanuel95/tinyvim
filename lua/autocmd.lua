@@ -15,8 +15,7 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 
 api.nvim_create_autocmd("FileType", {
   callback = function()
-    local p = vim.treesitter.get_parser()
-    if p then
+    if vim.treesitter.get_parser(nil, nil, { error = false }) then
       vim.treesitter.start()
     end
   end,
