@@ -53,6 +53,9 @@ o.ttimeoutlen = 10
 vim.api.nvim_set_hl(0, "YankHighlight", { bg = "#df8e1d", fg = "NONE" })
 vim.api.nvim_set_hl(0, "IndentLine", { link = "Comment" })
 
+-- Treesitter
+vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
 -- Mason binaries path
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
 vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. vim.fn.stdpath "data" .. "/mason/bin"
