@@ -7,6 +7,7 @@ M.setup = function()
       "lua",
       "vimdoc",
       "http",
+      "json",
       "markdown",
       "markdown_inline",
       "yaml",

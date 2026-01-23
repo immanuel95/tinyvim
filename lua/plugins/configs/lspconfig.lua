@@ -51,6 +51,8 @@ local servers = {
   html = {},
   cssls = {},
   svelte = {},
+  yamlls = {},
+  marksman = {},
 
   lua_ls = {
     settings = {
@@ -145,8 +147,6 @@ local servers = {
       },
     },
   },
-
-  yamlls = {},
 }
 
 for name, opts in pairs(servers) do
