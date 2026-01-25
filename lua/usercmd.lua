@@ -1,5 +1,3 @@
--- File: lua/usercmd.lua
-
 local tools = {
   "css-lsp",
   "html-lsp",
