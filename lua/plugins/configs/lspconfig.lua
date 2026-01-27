@@ -99,7 +99,15 @@ local servers = {
 
   pyright = {
     settings = {
-      python = { analysis = { ignore = { "*" } } },
+      python = {
+        analysis = {
+          -- ignore = { "*" },
+          typeCheckingMode = "standard",
+          autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+          diagnosticMode = "openFilesOnly",
+        },
+      },
       pyright = { disableOrganizeImports = true },
     },
   },
@@ -107,7 +115,7 @@ local servers = {
   ruff = {
     init_options = {
       settings = {
-        logLevel = "error",
+        logLevel = "debug",
         format = { enable = true },
         organizeImports = true,
         fixAll = true,
@@ -172,11 +180,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "gd", vim.lsp.buf.definition, opts)
     map("n", "<space>D", vim.lsp.buf.type_definition, opts)
     map("n", "<space>rn", vim.lsp.buf.rename, opts)
-    map("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
-    map("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
-    map("n", "<space>wl", function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
+
+    -- reference and hover
+    map("n", "gr", vim.lsp.buf.references, { buffer = bufnr, desc = "LSP Show references" })
+    map("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover information" })
+    map("n", "gi", vim.lsp.buf.implementation, { buffer = bufnr, desc = "LSP Go to implementation" })
+
+    -- Diagnostic Navigation
+    map("n", "<leader>e", vim.diagnostic.open_float, { buffer = bufnr, desc = "Show diagnostic error messages" })
+    map("n", "<leader>xx", vim.diagnostic.setloclist, { buffer = bufnr, desc = "Open diagnostic list" })
 
     if client and client.name == "ruff" then
       -- Disable pyright hover in favor of Pyright

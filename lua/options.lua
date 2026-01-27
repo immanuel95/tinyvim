@@ -5,6 +5,9 @@ local opt = vim.opt
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Swap File
+o.swapfile = false
+
 -- UI
 o.laststatus = 3
 o.showmode = false
